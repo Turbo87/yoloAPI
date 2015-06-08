@@ -8,7 +8,7 @@
         <div class="container">
             <div class="starter-template">
                 <h1>Yolo API Management</h1>
-                <p>Use this dashboard to authorize new users and clients to access the API.</p>
+                <p>Use this dashboard to authorize new users to access the API.</p>
                 <div class="well">
                     <h2>Users</h2>
                     <p>There are {{ users|length }} authorized users.</p>
@@ -36,29 +36,6 @@
                         <input type="text" name="username" placeholder="username">
                         <input type="password" name="password" placeholder="password">
                         <input type="submit" name='submit' value='Add User'>
-                    </form>
-                </div>
-                <div class="well">
-                    <h2>Client</h2>
-                    <p>There are {{ clients|length }} authorized clients.</p>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Client ID</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for client in clients %}
-                            <tr>
-                                <td>{{ client.client_id }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <h4>Add Client</h4>
-                    <p>Generate a new client.</p>
-                    <form method="post" action="/">
-                        <input type="submit" name='submit' value='Add Client'>
                     </form>
                 </div>
             </div>

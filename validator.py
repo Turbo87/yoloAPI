@@ -15,7 +15,7 @@ class MyRequestValidator(OAuth2RequestValidator):
         :param OAuth2RequestValidator: Overrides the OAuth2RequestValidator.
     """
     def __init__(self):
-        self._clientgetter = Client.find
+        self._clientgetter = lambda client_id: Client()
         self._usergetter = User.find_with_password
         self._tokengetter = Token.find
         self._tokensetter = Token.save
