@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
+from flask import current_app
+import jwt
+
 from core import db
 import bcrypt
 
@@ -127,7 +130,19 @@ class Token(db.Model):
         :param refresh_token: User refresh token.
         """
         if access_token:
-            return Token.query.filter_by(access_token=access_token).first()
+            try:
+                decoded = jwt.decode(access_token, current_app.config.get('SECRET_KEY'),
+                                     options={'verify_signature': True})
+            except jwt.InvalidTokenError:
+                return None
+
+            return Token(
+                user_id=decoded['user'],
+                token_type='Bearer',
+                access_token=access_token,
+                expires=datetime.utcfromtimestamp(decoded['exp'])
+            )
+
         elif refresh_token:
             return Token.query.filter_by(refresh_token=refresh_token).first()
 
