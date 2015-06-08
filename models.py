@@ -98,6 +98,18 @@ class Client(object):
     allowed_grant_types = ['password', 'refresh_token']
 
 
+class AccessToken(object):
+    client_id = Client.client_id
+    token_type = 'Bearer'
+    user = None
+
+    def __init__(self, access_token, user_id, expires, scopes=None):
+        self.access_token = access_token
+        self.user_id = user_id
+        self.expires = expires
+        self.scopes = scopes or []
+
+
 class Token(db.Model):
     """ Access or refresh token
 
@@ -136,9 +148,9 @@ class Token(db.Model):
             except jwt.InvalidTokenError:
                 return None
 
-            return Token(
+            return AccessToken(
+                access_token,
                 user_id=decoded['user'],
-                access_token=access_token,
                 expires=datetime.utcfromtimestamp(decoded['exp'])
             )
 
