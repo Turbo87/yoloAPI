@@ -132,7 +132,7 @@ class Token(db.Model):
         if access_token:
             try:
                 decoded = jwt.decode(access_token, current_app.config.get('SECRET_KEY'),
-                                     options={'verify_signature': True})
+                                     options={'verify_exp': False})
             except jwt.InvalidTokenError:
                 return None
 
