@@ -103,6 +103,20 @@ class AccessToken(object):
     token_type = 'Bearer'
     user = None
 
+    @classmethod
+    def from_jwt(cls, access_token):
+        try:
+            decoded = jwt.decode(access_token, current_app.config.get('SECRET_KEY'),
+                                 options={'verify_exp': False})
+        except jwt.InvalidTokenError:
+            return None
+
+        return AccessToken(
+            access_token,
+            user_id=decoded['user'],
+            expires=datetime.utcfromtimestamp(decoded['exp'])
+        )
+
     def __init__(self, access_token, user_id, expires, scopes=None):
         self.access_token = access_token
         self.user_id = user_id
@@ -142,17 +156,7 @@ class Token(db.Model):
         :param refresh_token: User refresh token.
         """
         if access_token:
-            try:
-                decoded = jwt.decode(access_token, current_app.config.get('SECRET_KEY'),
-                                     options={'verify_exp': False})
-            except jwt.InvalidTokenError:
-                return None
-
-            return AccessToken(
-                access_token,
-                user_id=decoded['user'],
-                expires=datetime.utcfromtimestamp(decoded['exp'])
-            )
+            return AccessToken.from_jwt(access_token)
 
         elif refresh_token:
             return Token.query.filter_by(refresh_token=refresh_token).first()
