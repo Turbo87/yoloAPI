@@ -6,8 +6,7 @@ The core module holds generic functions and the Flask extensions.
 """
 
 from flask_sqlalchemy import SQLAlchemy
-from flask_oauthlib.provider import OAuth2Provider
-
+from provider import MyProvider
 
 db = SQLAlchemy()
-oauth = OAuth2Provider()
+oauth = MyProvider()
