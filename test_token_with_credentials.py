@@ -1,10 +1,20 @@
+from werkzeug.datastructures import Headers
+
+ORIGIN = 'https://www.google.com'
+
+
 def test_405_for_get(client):
     assert client.get('/oauth/token').status_code == 405
 
 
 def test_400_without_grant_type(client):
-    response = client.post('/oauth/token')
+    headers = Headers()
+    headers.set('Origin', ORIGIN)
+
+    response = client.post('/oauth/token', headers=headers)
     assert response.status_code == 400
+    assert response.headers.get('Access-Control-Allow-Origin') == ORIGIN
+    assert response.headers.get('Access-Control-Allow-Credentials') == 'true'
     assert response.json.get('error') == 'unsupported_grant_type'
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from validator import MyRequestValidator
 from core import db, oauth
 from views import yoloapi
@@ -31,6 +31,22 @@ def create_app(settings_override=None):
 
     # Register views on the application.
     app.register_blueprint(yoloapi)
+
+    @app.after_request
+    def add_cors_headers(response):
+        if 'Origin' in request.headers:
+            response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin'))
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+
+            if 'Access-Control-Request-Methods' in request.headers:
+                response.headers.add('Access-Control-Allow-Methods',
+                                     request.headers.get('Access-Control-Request-Methods'))
+
+            if 'Access-Control-Request-Headers' in request.headers:
+                response.headers.add('Access-Control-Allow-Headers',
+                                     request.headers.get('Access-Control-Request-Headers'))
+
+        return response
 
     return app
 

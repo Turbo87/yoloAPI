@@ -1,6 +1,9 @@
 import pytest
+from werkzeug.datastructures import Headers
 
 from app import create_app
+
+ORIGIN = 'https://www.google.com'
 
 
 @pytest.fixture
@@ -10,12 +13,17 @@ def app():
 
 @pytest.fixture
 def tokens(client):
-    response = client.post('/oauth/token', data={
+    headers = Headers()
+    headers.set('Origin', ORIGIN)
+
+    response = client.post('/oauth/token', headers=headers, data={
         'grant_type': 'password',
         'username': 'test',
         'password': 'secret123',
     })
     assert response.status_code == 200
+    assert response.headers.get('Access-Control-Allow-Origin') == ORIGIN
+    assert response.headers.get('Access-Control-Allow-Credentials') == 'true'
     assert response.json.get('access_token')
     assert response.json.get('expires_in')
     assert response.json.get('token_type') == 'Bearer'
