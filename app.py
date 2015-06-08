@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask
+from flask import Flask, jsonify
 from validator import MyRequestValidator
 from core import db, oauth
 from views import yoloapi
@@ -23,6 +23,10 @@ def create_app(settings_override=None):
     db.init_app(app)
     oauth.init_app(app)
     oauth._validator = MyRequestValidator()
+
+    @oauth.invalid_response
+    def invalid_require_oauth(req):
+        return jsonify(error='invalid_token', message=req.error_message), 401
 
     # Register views on the application.
     app.register_blueprint(yoloapi)
