@@ -111,7 +111,7 @@ class Token(db.Model):
     client_id = Client.client_id
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User')
-    token_type = db.Column(db.String(40))
+    token_type = 'Bearer'
     access_token = db.Column(db.String(255), unique=True)
     refresh_token = db.Column(db.String(255), unique=True)
     expires = db.Column(db.DateTime)
@@ -138,7 +138,6 @@ class Token(db.Model):
 
             return Token(
                 user_id=decoded['user'],
-                token_type='Bearer',
                 access_token=access_token,
                 expires=datetime.utcfromtimestamp(decoded['exp'])
             )
@@ -170,7 +169,6 @@ class Token(db.Model):
             tok = Token(
                 access_token=token['access_token'],
                 refresh_token=token['refresh_token'],
-                token_type=token['token_type'],
                 expires=expires,
                 user_id=request.user.id,
             )
