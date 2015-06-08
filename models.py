@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask import current_app
 import jwt
 
@@ -173,19 +173,10 @@ class Token(db.Model):
         :param **kwargs: Arbitrary keyword arguments.
         """
 
-        expires_in = token.get('expires_in')
-        expires = datetime.utcnow() + timedelta(seconds=expires_in)
-
-        if request.grant_type == 'refresh_token':
-            tok = Token.query.filter_by(refresh_token=token['refresh_token']).first()
-            tok.access_token = token['access_token']
-            tok.expires = expires
-
-        else:
+        if not request.grant_type == 'refresh_token':
             tok = Token(
                 refresh_token=token['refresh_token'],
                 user_id=request.user.id,
             )
             db.session.add(tok)
-
-        db.session.commit()
+            db.session.commit()
