@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, jsonify, request
-from validator import MyRequestValidator
 from database import db
 from oauth import oauth
 from views import yoloapi
@@ -23,7 +22,6 @@ def create_app(settings_override=None):
     # Initialize extensions on the application.
     db.init_app(app)
     oauth.init_app(app)
-    oauth._validator = MyRequestValidator()
 
     @oauth.invalid_response
     def invalid_require_oauth(req):
