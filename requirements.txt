@@ -4,3 +4,6 @@ Flask-Oauthlib
 bcrypt
 pyOpenSSL
 PyJWT
+pytest
+pytest-capturelog
+pytest-flask
