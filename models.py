@@ -20,8 +20,7 @@ class User(db.Model):
     @staticmethod
     def find_with_password(username, password, *args, **kwargs):
         """ Query the User collection for a record with matching username and
-        password hash. If only a username is supplied, find the first matching
-        document with that username.
+        password hash.
 
         :param username: Username of the user.
         :param password: Password of the user.
@@ -29,15 +28,13 @@ class User(db.Model):
         :param **kwargs: Arbitrary keyword arguments.
         """
         user = User.query.filter_by(username=username).first()
-        if user and password:
-            encodedpw = password.encode('utf-8')
-            userhash = user.hashpw.encode('utf-8')
-            return User.query.filter(
-                User.username == username,
-                User.hashpw == bcrypt.hashpw(encodedpw, userhash)
-            ).first()
-        else:
-            return user
+        if not user:
+            return None
+
+        encodedpw = password.encode('utf-8')
+        userhash = user.hashpw.encode('utf-8')
+
+        return user if user.hashpw == bcrypt.hashpw(encodedpw, userhash) else None
 
     @staticmethod
     def save(username, password):
