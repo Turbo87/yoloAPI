@@ -39,8 +39,4 @@ class MyRequestValidator(OAuth2RequestValidator):
             log.debug('Authenticate client failed, client not found.')
             return False
 
-        if client.client_type == 'public':
-            return self.authenticate_client_id(client_id, request)
-        else:
-            return OAuth2RequestValidator.authenticate_client(
-                self, request, *args, **kwargs)
+        return self.authenticate_client_id(client_id, request)

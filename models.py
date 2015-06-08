@@ -88,7 +88,7 @@ class Client(db.Model):
     :param db.Model: Base class for database models.
     """
     client_id = db.Column(db.String(40), primary_key=True)
-    client_type = db.Column(db.String(40))
+    client_type = 'public'
 
     @property
     def allowed_grant_types(self):
@@ -122,7 +122,7 @@ class Client(db.Model):
     @staticmethod
     def generate():
         """ Generate a new public client with the ObjectID helper."""
-        client = Client(client_id=gen_salt(40), client_type='public')
+        client = Client(client_id=gen_salt(40))
         db.session.add(client)
         db.session.commit()
 
