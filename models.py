@@ -88,25 +88,9 @@ class Client(object):
     """
     client_id = 'default'
     client_type = 'public'
-
-    @property
-    def allowed_grant_types(self):
-        """ Returns allowed grant types.
-
-        Presently, only the password grant type is allowed.
-        """
-        return ['password']
-
-    @property
-    def default_scopes(self):
-        """ Returns default scopes associated with the Client. """
-        return []
-
-    def default_redirect_uri():
-        """ Return a blank default redirect URI since we are not implementing
-            redirects.
-        """
-        return ''
+    default_redirect_uri = ''
+    default_scopes = []
+    allowed_grant_types = ['password']
 
 
 class Token(db.Model):
