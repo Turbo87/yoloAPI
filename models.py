@@ -112,9 +112,9 @@ class Token(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User')
     token_type = 'Bearer'
-    access_token = db.Column(db.String(255), unique=True)
+    access_token = None
     refresh_token = db.Column(db.String(255), unique=True)
-    expires = db.Column(db.DateTime)
+    expires = None
     scopes = ['']
 
     def delete(self):
@@ -167,9 +167,7 @@ class Token(db.Model):
 
         else:
             tok = Token(
-                access_token=token['access_token'],
                 refresh_token=token['refresh_token'],
-                expires=expires,
                 user_id=request.user.id,
             )
             db.session.add(tok)
