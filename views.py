@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 from models import Client, User
 from core import oauth
 
@@ -37,9 +37,7 @@ def management():
     return render_template('management.html', users=User.all())
 
 
-@yoloapi.route('/yolo')
+@yoloapi.route('/secrets')
 @oauth.require_oauth()
-def yolo():
-    """ This is an example endpoint we are trying to protect. """
-    return "YOLO! Congraulations, you made it through and accessed the " \
-        "protected resource!"
+def secrets():
+    return jsonify({'secrets': [1, 1, 2, 3, 5, 8, 13]})
