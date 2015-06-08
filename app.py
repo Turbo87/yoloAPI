@@ -41,4 +41,4 @@ if __name__ == '__main__':
     # Create app and SQL schemas in database, then run the application.
     app = create_app()
     db.create_all(app=app)
-    app.run(ssl_context='adhoc')
+    app.run()
