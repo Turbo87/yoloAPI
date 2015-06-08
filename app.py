@@ -26,7 +26,8 @@ def create_app(settings_override=None):
 
     @oauth.invalid_response
     def invalid_require_oauth(req):
-        return jsonify(error='invalid_token', message=req.error_message), 401
+        message = req.error_message if req else 'Unauthorized'
+        return jsonify(error='invalid_token', message=message), 401
 
     # Register views on the application.
     app.register_blueprint(yoloapi)

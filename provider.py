@@ -1,4 +1,5 @@
 import time
+from flask import request
 
 from flask.ext.oauthlib.provider import OAuth2Provider
 from oauthlib.oauth2.rfc6749.tokens import random_token_generator
@@ -24,3 +25,25 @@ class MyProvider(OAuth2Provider):
             token['scope'] = ' '.join(request.scopes)
 
         return jwt.encode(token, self.secret)
+
+    def verify_request(self, scopes):
+        if request.authorization:
+            from models import User
+
+            user = User.find_with_password(
+                request.authorization.username,
+                request.authorization.password,
+            )
+
+            if user:
+                request.user_id = user.id
+                return True, None
+
+            return False, None
+
+        else:
+            valid, req = super(MyProvider, self).verify_request(scopes)
+            if valid:
+                request.user_id = req.access_token.user_id
+
+            return valid, req
