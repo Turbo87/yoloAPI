@@ -148,7 +148,7 @@ class Token(db.Model):
         # (client, user) combination.
         [db.session.delete(t) for t in toks]
 
-        expires_in = token.pop('expires_in')
+        expires_in = token.get('expires_in')
         expires = datetime.utcnow() + timedelta(seconds=expires_in)
 
         tok = Token(
