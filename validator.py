@@ -20,6 +20,9 @@ class MyRequestValidator(OAuth2RequestValidator):
         self._tokengetter = Token.find
         self._tokensetter = Token.save
 
+    def rotate_refresh_token(self, request):
+        return False
+
     def authenticate_client(self, request, *args, **kwargs):
 
         auth = request.headers.get('Authorization', None)

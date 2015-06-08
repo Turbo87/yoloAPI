@@ -142,21 +142,23 @@ class Token(db.Model):
         :param *args: Variable length argument list.
         :param **kwargs: Arbitrary keyword arguments.
         """
-        toks = Token.query.filter_by(user_id=request.user.id)
-
-        # Make sure that there is only one grant token for every
-        # (client, user) combination.
-        [db.session.delete(t) for t in toks]
 
         expires_in = token.get('expires_in')
         expires = datetime.utcnow() + timedelta(seconds=expires_in)
 
-        tok = Token(
-            access_token=token['access_token'],
-            refresh_token=token['refresh_token'],
-            token_type=token['token_type'],
-            expires=expires,
-            user_id=request.user.id,
-        )
-        db.session.add(tok)
+        if request.grant_type == 'refresh_token':
+            tok = Token.query.filter_by(refresh_token=token['refresh_token']).first()
+            tok.access_token = token['access_token']
+            tok.expires = expires
+
+        else:
+            tok = Token(
+                access_token=token['access_token'],
+                refresh_token=token['refresh_token'],
+                token_type=token['token_type'],
+                expires=expires,
+                user_id=request.user.id,
+            )
+            db.session.add(tok)
+
         db.session.commit()
