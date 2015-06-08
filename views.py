@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, jsonify
 from models import Client, User
-from core import oauth
+from oauth import oauth
 
 yoloapi = Blueprint('yoloApi', __name__)
 

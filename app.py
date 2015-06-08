@@ -3,7 +3,8 @@
 
 from flask import Flask, jsonify, request
 from validator import MyRequestValidator
-from core import db, oauth
+from database import db
+from oauth import oauth
 from views import yoloapi
 
 

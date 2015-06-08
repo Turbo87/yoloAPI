@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from flask import current_app
 import jwt
 
-from core import db
+from database import db
 import bcrypt
 
 
