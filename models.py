@@ -87,7 +87,9 @@ class Client(object):
     :param db.Model: Base class for database models.
     """
     client_id = 'default'
+    client_secret = None
     client_type = 'public'
+    redirect_uris = []
     default_redirect_uri = ''
     default_scopes = []
     allowed_grant_types = ['password']
