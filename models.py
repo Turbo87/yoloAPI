@@ -92,7 +92,7 @@ class Client(object):
     redirect_uris = []
     default_redirect_uri = ''
     default_scopes = []
-    allowed_grant_types = ['password']
+    allowed_grant_types = ['password', 'refresh_token']
 
 
 class Token(db.Model):
