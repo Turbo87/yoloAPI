@@ -6,7 +6,7 @@ from app import create_app
 ORIGIN = 'https://www.google.com'
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def app():
     return create_app(settings_override={'TESTING': True})
 
