@@ -137,11 +137,8 @@ class Token(db.Model):
     client_id = Client.client_id
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User')
-    token_type = 'Bearer'
-    access_token = None
     refresh_token = db.Column(db.String(255), unique=True)
-    expires = None
-    scopes = ['']
+    scopes = []
 
     def delete(self):
         db.session.delete(self)
