@@ -5,7 +5,9 @@ from flask_oauthlib.provider import OAuth2RequestValidator
 from flask_oauthlib.provider.oauth2 import log
 from flask_oauthlib.utils import decode_base64
 from oauthlib.common import to_unicode
-from models import User, Client, Token
+
+from database import db
+from models import User, Client, Token, AccessToken
 
 
 class MyRequestValidator(OAuth2RequestValidator):
@@ -17,11 +19,43 @@ class MyRequestValidator(OAuth2RequestValidator):
     def __init__(self):
         super(MyRequestValidator, self).__init__(
             clientgetter=lambda client_id: Client(),
-            tokengetter=Token.find,
+            tokengetter=self.tokengetter,
             grantgetter=None,
             usergetter=User.find_with_password,
-            tokensetter=Token.save,
+            tokensetter=self.tokensetter,
         )
+
+    @staticmethod
+    def tokengetter(access_token=None, refresh_token=None):
+        """ Retrieve a token record using submitted access token or
+        refresh token.
+
+        :param access_token: User access token.
+        :param refresh_token: User refresh token.
+        """
+        if access_token:
+            return AccessToken.from_jwt(access_token)
+
+        elif refresh_token:
+            return Token.query.filter_by(refresh_token=refresh_token).first()
+
+    @staticmethod
+    def tokensetter(token, request, *args, **kwargs):
+        """ Save a new token to the database.
+
+        :param token: Token dictionary containing access and refresh tokens,
+            plus token type.
+        :param request: Request dictionary containing information about the
+            client and user.
+        """
+
+        if not request.grant_type == 'refresh_token':
+            tok = Token(
+                refresh_token=token['refresh_token'],
+                user_id=request.user.id,
+            )
+            db.session.add(tok)
+            db.session.commit()
 
     def rotate_refresh_token(self, request):
         return False
