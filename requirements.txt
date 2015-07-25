@@ -1,6 +1,7 @@
 Flask
 Flask-SQLAlchemy
-Flask-Oauthlib
+Flask-OAuthlib
+oauthlib < 1.0.0
 bcrypt
 pyOpenSSL
 PyJWT
