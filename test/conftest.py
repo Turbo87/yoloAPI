@@ -2,6 +2,8 @@ import pytest
 from werkzeug.datastructures import Headers
 
 from yolo.app import create_app
+from yolo.database import db as _db
+from yolo.models import User
 
 ORIGIN = 'https://www.google.com'
 
@@ -10,12 +12,26 @@ ORIGIN = 'https://www.google.com'
 def app():
     class TestConfig(object):
         TESTING = True
+        SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
     return create_app(settings_override=TestConfig)
 
 
+@pytest.yield_fixture(scope='session')
+def db(app):
+    _db.app = app
+    _db.create_all()
+    yield _db
+    _db.drop_all()
+
+
+@pytest.fixture(scope='session')
+def test_user(db):
+    User.save('test', 'secret123')
+
+
 @pytest.fixture
-def tokens(client):
+def tokens(client, test_user):
     headers = Headers()
     headers.set('Origin', ORIGIN)
 
