@@ -1,5 +1,6 @@
+from functools import wraps
 import time
-from flask import request
+from flask import request, abort
 
 from flask.ext.oauthlib.provider import OAuth2Provider
 from oauthlib.oauth2.rfc6749.tokens import random_token_generator
@@ -44,3 +45,28 @@ class MyProvider(OAuth2Provider):
             request.user_id = req.access_token.user_id if valid else None
 
             return valid, req
+
+    def try_oauth(self, *scopes):
+        """Enhance resource with specified scopes."""
+        def wrapper(f):
+            @wraps(f)
+            def decorated(*args, **kwargs):
+                for func in self._before_request_funcs:
+                    func()
+
+                if hasattr(request, 'oauth') and request.oauth:
+                    return f(*args, **kwargs)
+
+                valid, req = self.verify_request(scopes)
+
+                for func in self._after_request_funcs:
+                    valid, req = func(valid, req)
+
+                if not valid and (not req or 'Authorization' in req.headers or req.access_token):
+                    if self._invalid_response:
+                        return self._invalid_response(req)
+                    return abort(401)
+                request.oauth = req
+                return f(*args, **kwargs)
+            return decorated
+        return wrapper

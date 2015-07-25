@@ -41,3 +41,9 @@ def management():
 @oauth.require_oauth()
 def secrets():
     return jsonify({'secrets': [1, 1, 2, 3, 5, 8, 13]})
+
+
+@yoloapi.route('/user')
+@oauth.try_oauth()
+def user():
+    return jsonify({'user': request.user_id})
