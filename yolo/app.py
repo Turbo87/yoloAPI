@@ -6,7 +6,7 @@ from flask import Flask
 from yolo.cors import cors
 from yolo.database import db
 from yolo.oauth import oauth
-from yolo.views import yoloapi
+from yolo.views import api
 
 
 def create_app(settings_override=None):
@@ -27,7 +27,7 @@ def create_app(settings_override=None):
     cors.init_app(app)
 
     # Register views on the application.
-    app.register_blueprint(yoloapi)
+    app.register_blueprint(api)
 
     return app
 
