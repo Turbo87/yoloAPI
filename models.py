@@ -10,25 +10,13 @@ import bcrypt
 
 
 class User(db.Model):
-    """ User which will be querying resources from the API.
-
-    :param db.Model: Base class for database models.
-    """
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True)
     hashpw = db.Column(db.String(80))
 
     @staticmethod
     def find_with_password(username, password, *args, **kwargs):
-        """ Query the User collection for a record with matching username and
-        password hash.
-
-        :param username: Username of the user.
-        :param password: Password of the user.
-        :param *args: Variable length argument list.
-        :param **kwargs: Arbitrary keyword arguments.
-        """
+        """ Query the User collection for a record with matching username and password hash. """
         user = User.query.filter_by(username=username).first()
         if not user:
             return None
@@ -40,11 +28,7 @@ class User(db.Model):
 
     @staticmethod
     def save(username, password):
-        """ Create a new User record with the supplied username and password.
-
-        :param username: Username of the user.
-        :param password: Password of the user.
-        """
+        """ Create a new User record with the supplied username and password. """
         salt = bcrypt.gensalt()
         hash = bcrypt.hashpw(password.encode('utf-8'), salt)
         user = User(username=username, hashpw=hash)
@@ -58,37 +42,6 @@ class User(db.Model):
 
 
 class Client(object):
-    """ Client application through which user is authenticating.
-
-    RFC 6749 Section 2 (http://tools.ietf.org/html/rfc6749#section-2)
-    describes clients:
-
-    +----------+
-     | Resource |
-     |  Owner   |
-     |          |
-     +----------+
-          v
-          |    Resource Owner
-         (A) Password Credentials
-          |
-          v
-     +---------+                                  +---------------+
-     |         |>--(B)---- Resource Owner ------->|               |
-     |         |         Password Credentials     | Authorization |
-     | Client  |                                  |     Server    |
-     |         |<--(C)---- Access Token ---------<|               |
-     |         |    (w/ Optional Refresh Token)   |               |
-     +---------+                                  +---------------+
-
-    Redirection URIs are mandatory for clients. We skip this requirement
-    as this example only allows the resource owner password credentials
-    grant (described in Section 4.3). In this flow, the Authorization
-    Server will not redirect the user as described in subsection 3.1.2
-    (Redirection Endpoint).
-
-    :param db.Model: Base class for database models.
-    """
     client_id = 'default'
     client_secret = None
     client_type = 'public'
@@ -125,14 +78,6 @@ class AccessToken(object):
 
 
 class RefreshToken(db.Model):
-    """ Access or refresh token
-
-        Because of our current grant flow, we are able to associate tokens
-        with the users who are requesting them. This can be used to track usage
-        and potential abuse. Only bearer tokens currently supported.
-
-        :param db.Model: Base class for database models.
-    """
     id = db.Column(db.Integer, primary_key=True)
     client_id = Client.client_id
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
