@@ -78,6 +78,8 @@ class AccessToken(object):
 
 
 class RefreshToken(db.Model):
+    __tablename__ = 'token'
+
     id = db.Column(db.Integer, primary_key=True)
     client_id = Client.client_id
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
