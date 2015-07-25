@@ -105,7 +105,7 @@ class CustomRequestValidator(OAuth2RequestValidator):
         :param request: Request dictionary containing information about the client and user.
         """
 
-        if not request.grant_type == 'refresh_token':
+        if request.grant_type != 'refresh_token':
             tok = RefreshToken(
                 refresh_token=token['refresh_token'],
                 user_id=request.user.id,
