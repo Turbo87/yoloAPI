@@ -15,12 +15,18 @@ from yolo.models import User, Client, RefreshToken, AccessToken
 
 
 class CustomProvider(OAuth2Provider):
+    def __init__(self, *args, **kwargs):
+        super(CustomProvider, self).__init__(*args, **kwargs)
+        self.blueprint = Blueprint('oauth', __name__)
+
     def init_app(self, app):
         super(CustomProvider, self).init_app(app)
         app.config.setdefault('OAUTH2_PROVIDER_TOKEN_GENERATOR', self.generate_token)
         app.config.setdefault('OAUTH2_PROVIDER_REFRESH_TOKEN_GENERATOR', random_token_generator)
 
         self.secret = app.config.get('SECRET_KEY')
+
+        app.register_blueprint(self.blueprint)
 
     def generate_token(self, request):
         token = {
@@ -140,7 +146,6 @@ class CustomRequestValidator(OAuth2RequestValidator):
 
 oauth = CustomProvider()
 oauth._validator = CustomRequestValidator()
-oauth.blueprint = Blueprint('oauth', __name__)
 
 
 @oauth.blueprint.route('/oauth/token', methods=['POST'])
