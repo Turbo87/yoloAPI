@@ -1,3 +1,5 @@
+-e .
+
 Flask
 Flask-SQLAlchemy
 Flask-OAuthlib
