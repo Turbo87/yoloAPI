@@ -1,7 +1,7 @@
 import pytest
 from werkzeug.datastructures import Headers
 
-from app import create_app
+from yolo.app import create_app
 
 ORIGIN = 'https://www.google.com'
 

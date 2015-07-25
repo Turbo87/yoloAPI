@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, jsonify, request
-from database import db
-from oauth import oauth
-from views import yoloapi
+
+from yolo.database import db
+from yolo.oauth import oauth
+from yolo.views import yoloapi
 
 
 def create_app(settings_override=None):
@@ -15,7 +16,7 @@ def create_app(settings_override=None):
     app = Flask(__name__)
 
     # Update configuration.
-    app.config.from_object('settings')
+    app.config.from_object('yolo.settings')
     app.config.from_pyfile('settings.cfg', silent=True)
     app.config.from_object(settings_override)
 

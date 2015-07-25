@@ -5,8 +5,9 @@ from datetime import datetime
 from flask import current_app
 import jwt
 
-from database import db
 import bcrypt
+
+from yolo.database import db
 
 
 class User(db.Model):

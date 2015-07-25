@@ -10,8 +10,8 @@ from flask_oauthlib.utils import decode_base64
 from oauthlib.common import to_unicode
 from oauthlib.oauth2.rfc6749.tokens import random_token_generator
 
-from database import db
-from models import User, Client, RefreshToken, AccessToken
+from yolo.database import db
+from yolo.models import User, Client, RefreshToken, AccessToken
 
 
 class CustomProvider(OAuth2Provider):
