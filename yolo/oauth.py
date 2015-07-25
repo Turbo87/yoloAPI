@@ -2,7 +2,8 @@ import time
 from functools import wraps
 
 import jwt
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, abort, jsonify
+
 from flask.ext.oauthlib.provider import OAuth2Provider
 from flask_oauthlib.provider import OAuth2RequestValidator
 from flask_oauthlib.provider.oauth2 import log
@@ -158,3 +159,10 @@ def access_token(*args, **kwargs):
 @oauth.revoke_handler
 def revoke_token():
     pass
+
+
+@oauth.invalid_response
+def invalid_require_oauth(req):
+    message = req.error_message if req else 'Unauthorized'
+    return jsonify(error='invalid_token', message=message), 401
+

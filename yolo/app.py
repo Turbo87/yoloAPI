@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, jsonify
+from flask import Flask
 
 from yolo.cors import cors
 from yolo.database import db
@@ -25,11 +25,6 @@ def create_app(settings_override=None):
     db.init_app(app)
     oauth.init_app(app)
     cors.init_app(app)
-
-    @oauth.invalid_response
-    def invalid_require_oauth(req):
-        message = req.error_message if req else 'Unauthorized'
-        return jsonify(error='invalid_token', message=message), 401
 
     # Register views on the application.
     app.register_blueprint(yoloapi)
