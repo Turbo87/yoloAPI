@@ -35,15 +35,12 @@ class MyProvider(OAuth2Provider):
                 request.authorization.password,
             )
 
-            if user:
-                request.user_id = user.id
-                return True, None
-
-            return False, None
+            request.user_id = user.id if user else None
+            return (user is not None), None
 
         else:
             valid, req = super(MyProvider, self).verify_request(scopes)
-            if valid:
-                request.user_id = req.access_token.user_id
+
+            request.user_id = req.access_token.user_id if valid else None
 
             return valid, req
