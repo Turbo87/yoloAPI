@@ -79,11 +79,6 @@ class CustomProvider(OAuth2Provider):
 
 
 class CustomRequestValidator(OAuth2RequestValidator):
-    """ Defines a custom OAuth2 Request Validator based on the Client, User
-        and Token models.
-
-        :param OAuth2RequestValidator: Overrides the OAuth2RequestValidator.
-    """
     def __init__(self):
         super(CustomRequestValidator, self).__init__(
             clientgetter=lambda client_id: Client(),
@@ -95,12 +90,7 @@ class CustomRequestValidator(OAuth2RequestValidator):
 
     @staticmethod
     def tokengetter(access_token=None, refresh_token=None):
-        """ Retrieve a token record using submitted access token or
-        refresh token.
-
-        :param access_token: User access token.
-        :param refresh_token: User refresh token.
-        """
+        """ Retrieve a token record using submitted access token or refresh token. """
         if access_token:
             return AccessToken.from_jwt(access_token)
 
@@ -111,10 +101,8 @@ class CustomRequestValidator(OAuth2RequestValidator):
     def tokensetter(token, request, *args, **kwargs):
         """ Save a new token to the database.
 
-        :param token: Token dictionary containing access and refresh tokens,
-            plus token type.
-        :param request: Request dictionary containing information about the
-            client and user.
+        :param token: Token dictionary containing access and refresh tokens, plus token type.
+        :param request: Request dictionary containing information about the client and user.
         """
 
         if not request.grant_type == 'refresh_token':
