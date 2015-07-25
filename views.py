@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, render_template, request, jsonify
-from models import Client, User
+from models import User
 from oauth import oauth
 
 yoloapi = Blueprint('yoloApi', __name__)
