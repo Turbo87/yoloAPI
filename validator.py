@@ -10,14 +10,14 @@ from database import db
 from models import User, Client, RefreshToken, AccessToken
 
 
-class MyRequestValidator(OAuth2RequestValidator):
+class CustomRequestValidator(OAuth2RequestValidator):
     """ Defines a custom OAuth2 Request Validator based on the Client, User
         and Token models.
 
         :param OAuth2RequestValidator: Overrides the OAuth2RequestValidator.
     """
     def __init__(self):
-        super(MyRequestValidator, self).__init__(
+        super(CustomRequestValidator, self).__init__(
             clientgetter=lambda client_id: Client(),
             tokengetter=self.tokengetter,
             grantgetter=None,

@@ -8,9 +8,9 @@ from oauthlib.oauth2.rfc6749.tokens import random_token_generator
 import jwt
 
 
-class MyProvider(OAuth2Provider):
+class CustomProvider(OAuth2Provider):
     def init_app(self, app):
-        super(MyProvider, self).init_app(app)
+        super(CustomProvider, self).init_app(app)
         app.config.setdefault('OAUTH2_PROVIDER_TOKEN_GENERATOR', self.generate_token)
         app.config.setdefault('OAUTH2_PROVIDER_REFRESH_TOKEN_GENERATOR', random_token_generator)
 
@@ -40,7 +40,7 @@ class MyProvider(OAuth2Provider):
             return (user is not None), None
 
         else:
-            valid, req = super(MyProvider, self).verify_request(scopes)
+            valid, req = super(CustomProvider, self).verify_request(scopes)
 
             request.user_id = req.access_token.user_id if valid else None
 

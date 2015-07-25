@@ -1,10 +1,10 @@
 from flask import Blueprint
 
-from provider import MyProvider
-from validator import MyRequestValidator
+from provider import CustomProvider
+from validator import CustomRequestValidator
 
-oauth = MyProvider()
-oauth._validator = MyRequestValidator()
+oauth = CustomProvider()
+oauth._validator = CustomRequestValidator()
 oauth.blueprint = Blueprint('oauth', __name__)
 
 
