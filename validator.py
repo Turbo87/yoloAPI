@@ -7,7 +7,7 @@ from flask_oauthlib.utils import decode_base64
 from oauthlib.common import to_unicode
 
 from database import db
-from models import User, Client, Token, AccessToken
+from models import User, Client, RefreshToken, AccessToken
 
 
 class MyRequestValidator(OAuth2RequestValidator):
@@ -37,7 +37,7 @@ class MyRequestValidator(OAuth2RequestValidator):
             return AccessToken.from_jwt(access_token)
 
         elif refresh_token:
-            return Token.query.filter_by(refresh_token=refresh_token).first()
+            return RefreshToken.query.filter_by(refresh_token=refresh_token).first()
 
     @staticmethod
     def tokensetter(token, request, *args, **kwargs):
@@ -50,7 +50,7 @@ class MyRequestValidator(OAuth2RequestValidator):
         """
 
         if not request.grant_type == 'refresh_token':
-            tok = Token(
+            tok = RefreshToken(
                 refresh_token=token['refresh_token'],
                 user_id=request.user.id,
             )

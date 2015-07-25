@@ -124,7 +124,7 @@ class AccessToken(object):
         self.scopes = scopes or []
 
 
-class Token(db.Model):
+class RefreshToken(db.Model):
     """ Access or refresh token
 
         Because of our current grant flow, we are able to associate tokens
