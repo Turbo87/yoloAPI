@@ -8,7 +8,10 @@ ORIGIN = 'https://www.google.com'
 
 @pytest.fixture(scope='session')
 def app():
-    return create_app(settings_override={'TESTING': True})
+    class TestConfig(object):
+        TESTING = True
+
+    return create_app(settings_override=TestConfig)
 
 
 @pytest.fixture
