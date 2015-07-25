@@ -7,3 +7,4 @@ PyJWT
 pytest
 pytest-capturelog
 pytest-flask
+freezegun
