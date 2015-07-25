@@ -30,6 +30,7 @@ def create_app(settings_override=None):
 
     # Register views on the application.
     app.register_blueprint(yoloapi)
+    app.register_blueprint(oauth.blueprint)
 
     @app.after_request
     def add_cors_headers(response):
