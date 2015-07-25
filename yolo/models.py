@@ -36,11 +36,6 @@ class User(db.Model):
         db.session.add(user)
         db.session.commit()
 
-    @staticmethod
-    def all():
-        """ Return all User records found in the database. """
-        return User.query.all()
-
 
 class Client(object):
     client_id = 'default'
