@@ -81,7 +81,7 @@ def test_401_with_invalid_credentials(client):
 
 def test_200_with_credentials(client):
     headers = Headers()
-    headers.set('Authorization', 'Basic ' + base64.b64encode('test:secret123'))
+    headers.set('Authorization', 'Basic ' + base64.b64encode('test@foo.com:secret123'))
 
     response = client.get('/user', headers=headers)
     assert response.status_code == 200

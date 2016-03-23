@@ -44,7 +44,7 @@ class CustomProvider(OAuth2Provider):
         if request.authorization:
             from models import User
 
-            user = User.find_with_password(
+            user = User.by_credentials(
                 request.authorization.username,
                 request.authorization.password,
             )
@@ -91,7 +91,7 @@ class CustomRequestValidator(OAuth2RequestValidator):
             clientgetter=lambda client_id: Client(),
             tokengetter=self.tokengetter,
             grantgetter=None,
-            usergetter=User.find_with_password,
+            usergetter=User.by_credentials,
             tokensetter=self.tokensetter,
         )
 

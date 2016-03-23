@@ -27,7 +27,7 @@ def db(app):
 
 @pytest.fixture(scope='session')
 def test_user(db):
-    User.save('test', 'secret123')
+    User.save('test@foo.com', 'secret123')
 
 
 @pytest.fixture
@@ -37,7 +37,7 @@ def tokens(client, test_user):
 
     response = client.post('/oauth/token', headers=headers, data={
         'grant_type': 'password',
-        'username': 'test',
+        'username': 'test@foo.com',
         'password': 'secret123',
     })
     assert response.status_code == 200

@@ -43,7 +43,7 @@ def test_password_401_with_wrong_credentials(client):
 def test_password_200_with_correct_credentials(client):
     response = client.post('/oauth/token', data={
         'grant_type': 'password',
-        'username': 'test',
+        'username': 'test@foo.com',
         'password': 'secret123',
     })
     assert response.status_code == 200
