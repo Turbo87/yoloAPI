@@ -74,10 +74,3 @@ class User(db.Model):
             password = password.encode('utf-8')
         hash.update(password + str(self.password[:64]))
         return self.password[64:] == hash.hexdigest()
-
-    @staticmethod
-    def save(email, password):
-        """ Create a new User record with the supplied email and password. """
-        user = User(email_address=email, password=password)
-        db.session.add(user)
-        db.session.commit()
