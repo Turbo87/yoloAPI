@@ -1,8 +1,8 @@
 import time
 from functools import wraps
 
-import jwt
-from flask import Blueprint, request, abort, jsonify
+from itsdangerous import JSONWebSignatureSerializer
+from flask import Blueprint, request, abort, jsonify, current_app
 
 from flask.ext.oauthlib.provider import OAuth2Provider
 from flask_oauthlib.provider import OAuth2RequestValidator
@@ -25,7 +25,7 @@ class CustomProvider(OAuth2Provider):
         app.config.setdefault('OAUTH2_PROVIDER_TOKEN_GENERATOR', self.generate_token)
         app.config.setdefault('OAUTH2_PROVIDER_REFRESH_TOKEN_GENERATOR', random_token_generator)
 
-        self.secret = app.config.get('SECRET_KEY')
+        app.jws = JSONWebSignatureSerializer(app.config.get('SECRET_KEY'))
 
         app.register_blueprint(self.blueprint)
 
@@ -38,7 +38,7 @@ class CustomProvider(OAuth2Provider):
         if request.scopes is not None:
             token['scope'] = ' '.join(request.scopes)
 
-        return jwt.encode(token, self.secret)
+        return current_app.jws.dumps(token)
 
     def verify_request(self, scopes):
         if request.authorization:

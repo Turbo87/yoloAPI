@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import current_app
-import jwt
+from itsdangerous import BadSignature
 
 from yolo.database import db
 
@@ -23,9 +23,8 @@ class AccessToken(object):
     @classmethod
     def from_jwt(cls, access_token):
         try:
-            decoded = jwt.decode(access_token, current_app.config.get('SECRET_KEY'),
-                                 options={'verify_exp': False})
-        except jwt.InvalidTokenError:
+            decoded = current_app.jws.loads(access_token)
+        except BadSignature:
             return None
 
         return AccessToken(

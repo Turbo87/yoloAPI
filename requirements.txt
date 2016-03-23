@@ -4,7 +4,6 @@ Flask
 Flask-SQLAlchemy
 Flask-OAuthlib
 oauthlib < 1.0.0
-PyJWT
 pytest
 pytest-capturelog
 pytest-flask
